@@ -1,21 +1,25 @@
 <script setup>
-import { ref, onMounted, onUnmounted, computed } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, onMounted, onUnmounted, computed, watch } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { routes } from '../config/routes'
 import api from '../api'
 
 const router = useRouter()
+const route = useRoute()
 const userInfo = ref(null)
 const showUserMenu = ref(false)
 const menuTimeout = ref(null)
 const isScrolled = ref(false)
 const lastScrollTop = ref(0)
 const isHeaderVisible = ref(true)
+const activeMenu = ref('')
+const activeSubmenu = ref('')
+const activeSubMenuId = ref(null)
 
 // 处理滚动事件
 const handleScroll = () => {
   const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop
-  
+
   // 检测是否滚动
   isScrolled.value = currentScrollTop > 0
 
@@ -56,12 +60,49 @@ const handleMenuEnter = () => {
 const handleMenuLeave = () => {
   menuTimeout.value = setTimeout(() => {
     showUserMenu.value = false
-  }, 300)
+  }, 100)
 }
 
 // 导航处理
 const handleNavClick = (path) => {
   router.push(`/dashboard/${path}`)
+}
+
+// 菜单点击处理
+
+const handleMenuClick = (route) => {
+  if (activeSubMenuId.value === route.path) {
+    activeSubMenuId.value = null
+  } else {
+    activeSubMenuId.value = route.path
+  }
+  if (!route.children) {
+    handleNavClick(route.path)
+  }
+}
+
+// 添加鼠标移入处理
+const handleMenuMouseEnter = (route) => {
+  if (route.children) {
+    activeSubMenuId.value = route.path
+  }
+}
+
+// 添加鼠标移出处理
+const handleMenuMouseLeave = () => {
+  activeSubMenuId.value = null
+}
+
+
+
+
+
+// 二级菜单点击处理
+const handleSubMenuClick = (parentPath, child) => {
+  activeMenu.value = parentPath
+  activeSubmenu.value = child.path
+  handleNavClick(child.componentPath)
+  activeSubMenuId.value = null
 }
 
 const handleHomeClick = () => {
@@ -88,16 +129,31 @@ const checkLoginStatus = async () => {
     console.error('获取登录状态失败:', error)
   }
 }
+
+// 监听路由变化以更新激活状态
+watch(() => route.path, (newPath) => {
+  const path = newPath.split('/').pop()
+  activeMenu.value = path
+  
+  // 添加空值检查
+  if (routes && Array.isArray(routes)) {
+    routes.forEach(route => {
+      if (route.children) {
+        const child = route.children.find(child => child.path === path)
+        if (child) {
+          activeSubmenu.value = child.path
+        }
+      }
+    })
+  }
+})
 </script>
 
 <template>
-  <header 
-    class="dashboard-header" 
-    :class="{
-      'scrolled': isScrolled,
-      'header-hidden': !isHeaderVisible
-    }"
-  >
+  <header class="dashboard-header" :class="{
+    'scrolled': isScrolled,
+    'header-hidden': !isHeaderVisible
+  }">
     <div class="header-content">
       <!-- Logo区域 -->
       <div class="header-left">
@@ -110,60 +166,44 @@ const checkLoginStatus = async () => {
 
       <!-- 导航区域 -->
       <nav class="header-nav">
-        <a 
-          v-for="(route, key) in routes" 
-          :key="key"
-          href="#"
-          @click.prevent="handleNavClick(route.path)"
-          :class="{ active: $route.path.includes(route.path) }"
-        >
-          <i :class="route.iconClass">{{ route.icon }}</i>
-          {{ route.name }}
-        </a>
+        <div v-for="route in routes" :key="route.path" class="nav-item" @mouseenter="handleMenuMouseEnter(route)"
+          @mouseleave="handleMenuMouseLeave">
+          <div class="nav-title" @click="handleMenuClick(route)" :class="{ 'active': activeMenu === route.path }">
+            <span class="nav-icon" :class="route.iconClass">{{ route.icon }}</span>
+            <span class="nav-text">{{ route.name }}</span>
+            <i v-if="route.children" class="arrow-icon" :class="{ 'rotated': activeSubMenuId === route.path }">▼</i>
+          </div>
+
+          <div v-if="route.children" class="sub-menu" :class="{ 'visible': activeSubMenuId === route.path }">
+            <div v-for="child in route.children" :key="child.path" class="sub-menu-item"
+              :class="{ 'active': activeSubmenu === child.path }" @click="handleSubMenuClick(route.path, child)">
+              <span class="sub-menu-icon" :class="child.iconClass">{{ child.icon }}</span>
+              <span class="sub-menu-text">{{ child.name }}</span>
+            </div>
+          </div>
+        </div>
       </nav>
 
       <!-- 用户信息区域 -->
-      <div 
-        class="user-info" 
-        v-if="userInfo"
-        @mouseenter="handleMenuEnter"
-        @mouseleave="handleMenuLeave"
-      >
+      <div class="user-info" v-if="userInfo" @mouseenter="handleMenuEnter" @mouseleave="handleMenuLeave">
         <div class="user-avatar">
           <img :src="userInfo?.avatar" alt="用户头像">
           <span class="username">{{ userInfo.nickname || userInfo.username }}</span>
           <i class="icon-arrow" :class="{ 'rotate': showUserMenu }">▼</i>
         </div>
-        
+
         <!-- 用户菜单 -->
-        <div 
-          v-if="showUserMenu" 
-          class="user-menu"
-          @mouseenter="handleMenuEnter"
-          @mouseleave="handleMenuLeave"
-        >
-          <a 
-            href="#" 
-            class="menu-item"
-            @click.prevent="handleNavClick('profile')"
-          >
+        <div v-if="showUserMenu" class="user-menu" @mouseenter="handleMenuEnter" @mouseleave="handleMenuLeave">
+          <a href="#" class="menu-item" @click.prevent="handleNavClick('profile')">
             <i class="icon-profile">👤</i>
             个人资料
           </a>
-          <a 
-            href="#" 
-            class="menu-item"
-            @click.prevent="handleNavClick('settings')"
-          >
+          <a href="#" class="menu-item" @click.prevent="handleNavClick('settings')">
             <i class="icon-settings">⚙️</i>
             设置
           </a>
           <div class="menu-divider"></div>
-          <a 
-            href="#" 
-            class="menu-item logout"
-            @click.prevent="handleLogout"
-          >
+          <a href="#" class="menu-item logout" @click.prevent="handleLogout">
             <i class="icon-logout">🚪</i>
             退出登录
           </a>
@@ -187,20 +227,18 @@ const checkLoginStatus = async () => {
   transform: translateY(0);
 }
 
-/* 滚动状态样式 */
 .dashboard-header.scrolled {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* 隐藏状态样式 */
 .dashboard-header.header-hidden {
   transform: translateY(-100%);
 }
 
 .header-content {
-  width: var(--content-width);
+  max-width: 1200px;
   margin: 0 auto;
   height: 100%;
   display: flex;
@@ -227,29 +265,75 @@ const checkLoginStatus = async () => {
   align-items: center;
 }
 
-.header-nav a {
+.nav-item {
+  position: relative;
+  cursor: pointer;
+}
+
+.nav-title {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  color: var(--text-color);
-  text-decoration: none;
-  border-radius: var(--border-radius);
-  transition: all 0.3s ease;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: all 0.3s;
 }
 
-.header-nav a:hover {
+.nav-title:hover {
   background: var(--bg-light);
+}
+
+.nav-title.active {
   color: var(--primary-color);
+  background: var(--bg-light);
 }
 
-.header-nav a.active {
-  background: var(--primary-color);
-  color: var(--primary);
+.arrow-icon {
+  font-size: 12px;
+  margin-left: 4px;
+  transition: transform 0.3s;
 }
 
-.header-nav i {
-  font-size: 1.2rem;
+.arrow-icon.rotated {
+  transform: rotate(180deg);
+}
+
+.sub-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 150px;
+  background: white;
+  border-radius: 4px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s;
+  z-index: 1000;
+}
+
+.sub-menu.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.sub-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  transition: all 0.3s;
+}
+
+.sub-menu-item:hover {
+  background: var(--bg-light);
+}
+
+.sub-menu-item.active {
+  color: var(--primary-color);
+  background: var(--bg-light);
 }
 
 .user-info {
@@ -262,8 +346,8 @@ const checkLoginStatus = async () => {
   gap: 0.8rem;
   padding: 0.5rem;
   cursor: pointer;
-  border-radius: var(--border-radius);
-  transition: all 0.3s ease;
+  border-radius: 4px;
+  transition: all 0.3s;
 }
 
 .user-avatar:hover {
@@ -298,8 +382,8 @@ const checkLoginStatus = async () => {
   right: 0;
   width: 200px;
   background: white;
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow);
+  border-radius: 4px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
   padding: 0.5rem;
   margin-top: 0.5rem;
 }
@@ -311,8 +395,8 @@ const checkLoginStatus = async () => {
   padding: 0.8rem 1rem;
   color: var(--text-color);
   text-decoration: none;
-  border-radius: var(--border-radius);
-  transition: all 0.3s ease;
+  border-radius: 4px;
+  transition: all 0.3s;
 }
 
 .menu-item:hover {
@@ -340,16 +424,11 @@ const checkLoginStatus = async () => {
   border-bottom: 1px solid var(--border-color);
 }
 
-[data-theme="dark"] .header-nav a {
-  color: var(--text-light);
+[data-theme="dark"] .dashboard-header.scrolled {
+  background: rgba(26, 26, 26, 0.95);
 }
 
-[data-theme="dark"] .header-nav a:hover {
-  background: rgba(66, 184, 131, 0.1);
-  color: var(--primary-color);
-}
-
-[data-theme="dark"] .user-menu {
+[data-theme="dark"] .sub-menu {
   background: var(--bg-darker);
   border: 1px solid var(--border-color);
 }
@@ -360,17 +439,17 @@ const checkLoginStatus = async () => {
     padding: 0 1rem;
   }
 
-  .header-nav {
+  .nav-text {
     display: none;
+  }
+
+  .sub-menu {
+    left: auto;
+    right: 0;
   }
 
   .username {
     display: none;
   }
 }
-
-/* 暗色主题适配 */
-[data-theme="dark"] .dashboard-header.scrolled {
-  background: rgba(26, 26, 26, 0.95);
-}
-</style> 
+</style>

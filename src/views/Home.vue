@@ -35,7 +35,7 @@ const handleTryOnline = async () => {
     <NavBar @show-auth="handleAuth" />
 
     <main>
-      <section class="hero">
+      <section id="hero" class="hero">
         <div class="hero-content">
           <h2>轻量级代码编辑器</h2>
           <p>快速、智能、高效的编程体验</p>
@@ -53,6 +53,12 @@ const handleTryOnline = async () => {
         <div class="features-content">
           <h2>核心功能</h2>
           <div class="feature-grid">
+            <div class="feature-card">
+              <i class="icon-syntax"></i>
+              <h3>智能AI编程</h3>
+              <p>超级语言大模型模型，自动生成代码片段。</p>
+              <p>支持多种编程语言和框架，帮助开发者快速实现功能。</p>
+            </div>
             <div class="feature-card">
               <i class="icon-syntax"></i>
               <h3>智能语法高亮</h3>
@@ -260,7 +266,7 @@ main {
 
 .feature-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: var(--spacing-lg);
   margin-bottom: var(--spacing-xl);
 }
@@ -393,7 +399,7 @@ main {
 
 /* 页脚样式 */
 footer {
-  background: var(--bg-dark);
+  
   color: var(--font-color-white);
   padding: var(--spacing-xl) 0;
 }

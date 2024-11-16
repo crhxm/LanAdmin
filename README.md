@@ -80,7 +80,7 @@ LanAdmin是一个基于Vue 3 + Vite构建的现代化后台管理系统，提供
 
 1. 权限管理  
 
- ```vue
+   ```vue
    // 基于角色的权限控制
    const roles = [
      { id: 1, name: '管理员', level: 999 },
@@ -92,18 +92,18 @@ LanAdmin是一个基于Vue 3 + Vite构建的现代化后台管理系统，提供
 
 2. 主题切换
 
-```javascript
-   // 主题管理
-   const ThemeManager = {
-     getTheme() {
-       return localStorage.getItem('app_theme') || 'light'
-     },
-     setTheme(theme) {
-       localStorage.setItem('app_theme', theme)
-       document.documentElement.setAttribute('data-theme', theme)
-     }
-   }   
-```
+   ```javascript
+      // 主题管理
+      const ThemeManager = {
+      getTheme() {
+         return localStorage.getItem('app_theme') || 'light'
+      },
+      setTheme(theme) {
+         localStorage.setItem('app_theme', theme)
+         document.documentElement.setAttribute('data-theme', theme)
+      }
+      }   
+   ```
 
 3. 路由配置
 
@@ -138,15 +138,15 @@ LanAdmin是一个基于Vue 3 + Vite构建的现代化后台管理系统，提供
 
 2. 样式系统
 
-```css
-   /* 统一的样式变量 */
-   :root {
-     --primary-color: #42b883;
-     --text-color: #2c3e50;
-     --bg-light: #f5f7fa;
-     --border-radius: 8px;
-   }   
-```
+   ```css
+      /* 统一的样式变量 */
+      :root {
+      --primary-color: #42b883;
+      --text-color: #2c3e50;
+      --bg-light: #f5f7fa;
+      --border-radius: 8px;
+      }   
+   ```
 
 3. 组件通信
    - Props向下传递
@@ -240,5 +240,3 @@ LanAdmin是一个基于Vue 3 + Vite构建的现代化后台管理系统，提供
 
 5. 作者版权
    - 本项目由[Crhxm](https://github.com/crhxm)创建
-   - 未经允许，禁止任何形式的转载
-  

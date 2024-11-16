@@ -130,10 +130,11 @@ onMounted(() => {
   <nav class="nav">
     <div class="nav-content">
       <h1>
-        <a href="#" @click="handleHomeClick" class="logo-link">LanCodeEditor</a>
+        <a href="#" @click="handleHomeClick" class="logo-link">LanGame</a>
       </h1>
       <nav>
-        <a href="#" @click="handleHomeClick" class="nav-home">
+        <!-- <a href="#hero" @click="handleHomeClick" class="nav-home"> -->
+        <a href="#hero" @click="(e) => handleNavClick(e, '/#hero')" class="nav-home">
           <i class="icon-home">🏠</i>
           主页
         </a>
