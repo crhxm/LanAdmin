@@ -13,7 +13,7 @@ const isLoggedIn = computed(() => !!userInfo.value)
 
 const handleNavClick = (e, path) => {
   e.preventDefault()
-  
+
   // 如果是需要登录的路径，先检查登录状态
   if (path === '/dashboard' || path.startsWith('/dashboard/')) {
     if (!isLoggedIn.value) {
@@ -21,7 +21,7 @@ const handleNavClick = (e, path) => {
       return
     }
   }
-  
+
   // 处理带有锚点的路径
   if (path.includes('#')) {
     const hash = path.split('#')[1]
@@ -44,7 +44,7 @@ const handleNavClick = (e, path) => {
     }
     return
   }
-  
+
   router.push(path)
 }
 
@@ -132,8 +132,9 @@ onMounted(() => {
       <h1>
         <a href="#" @click="handleHomeClick" class="logo-link">LanGame</a>
       </h1>
-      <nav>
+      <nav class="nav-home">
         <!-- <a href="#hero" @click="handleHomeClick" class="nav-home"> -->
+
         <a href="#hero" @click="(e) => handleNavClick(e, '/#hero')" class="nav-home">
           <i class="icon-home">🏠</i>
           主页
@@ -142,7 +143,8 @@ onMounted(() => {
         <a href="#download" @click="(e) => handleNavClick(e, '/#download')">下载</a>
         <a href="#docs" @click="(e) => handleNavClick(e, '/#docs')">文档</a>
         <a href="#about" @click="(e) => handleNavClick(e, '/#about')">关于</a>
-        
+
+
         <!-- 用户未登录显示登录注册按钮 -->
         <div class="auth-links" v-if="!isLoggedIn">
           <a href="#" @click="handleAuthClick">登录</a>
@@ -150,56 +152,30 @@ onMounted(() => {
         </div>
 
         <!-- 用户已登录显示用户信息 -->
-        <div 
-          class="user-info" 
-          v-if="userInfo"
-          @mouseenter="handleMenuEnter"
-          @mouseleave="handleMenuLeave"
-        >
+        <div class="user-info" v-if="userInfo" @mouseenter="handleMenuEnter" @mouseleave="handleMenuLeave">
           <div class="user-avatar">
             <img :src="userInfo?.avatar" alt="用户头像">
             <span class="username">{{ userInfo.nickname || userInfo.username }}</span>
             <i class="icon-arrow" :class="{ 'rotate': showUserMenu }">▼</i>
           </div>
-          
+
           <!-- 用户菜单 -->
-          <div 
-            v-if="showUserMenu" 
-            class="user-menu"
-            @mouseenter="handleMenuEnter"
-            @mouseleave="handleMenuLeave"
-          >
-            <a 
-              href="#" 
-              class="menu-item"
-              @click.prevent="handleDashboard"
-            >
+          <div v-if="showUserMenu" class="user-menu" @mouseenter="handleMenuEnter" @mouseleave="handleMenuLeave">
+            <a href="#" class="menu-item" @click.prevent="handleDashboard">
               <i class="icon-dashboard">🎮</i>
               控制台
             </a>
             <div class="menu-divider"></div>
-            <a 
-              href="#" 
-              class="menu-item"
-              @click.prevent="handleProfile"
-            >
+            <a href="#" class="menu-item" @click.prevent="handleProfile">
               <i class="icon-profile">👤</i>
               个人资料
             </a>
-            <a 
-              href="#" 
-              class="menu-item"
-              @click.prevent="handleSettings"
-            >
+            <a href="#" class="menu-item" @click.prevent="handleSettings">
               <i class="icon-settings">⚙️</i>
               设置
             </a>
             <div class="menu-divider"></div>
-            <a 
-              href="#" 
-              class="menu-item logout"
-              @click.prevent="handleLogout"
-            >
+            <a href="#" class="menu-item logout" @click.prevent="handleLogout">
               <i class="icon-logout">🚪</i>
               退出登录
             </a>
@@ -276,7 +252,7 @@ nav a:hover {
 .nav-home {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--spacing-md);
 }
 
 .icon-home {
@@ -466,7 +442,7 @@ nav a:hover {
   }
 }
 
-@media (max-width: 576px) {
+@media (max-width: 100px) {
   .nav a:not(.logo-link):not(.nav-home) {
     display: none;
   }
@@ -475,4 +451,4 @@ nav a:hover {
     display: flex;
   }
 }
-</style> 
+</style>

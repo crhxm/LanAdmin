@@ -5,22 +5,7 @@ export const routes = {
     name: '系统信息',
     componentPath: 'Overview',
     icon: '📊',
-    iconClass: 'icon-dashboard',
-    children: [
-      {
-        path: 'Run',
-        name: '运行系统',
-        componentPath: 'Overview/Run',
-        icon: '👥',
-        iconClass: 'icon-roles'
-      },
-      {
-        path: 'accounts',
-        name: '测试修改',
-        componentPath: 'system/Accounts',
-        icon: '👤',
-        iconClass: 'icon-accounts'
-      }]
+    iconClass: 'icon-dashboard'
   },
   profile: {
     path: 'profile',

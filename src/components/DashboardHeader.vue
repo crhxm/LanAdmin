@@ -101,7 +101,9 @@ const handleMenuMouseLeave = () => {
 const handleSubMenuClick = (parentPath, child) => {
   activeMenu.value = parentPath
   activeSubmenu.value = child.path
-  handleNavClick(child.componentPath)
+  //console.log(parentPath,child.path)
+  handleNavClick(parentPath+"/"+child.path)
+  //
   activeSubMenuId.value = null
 }
 
@@ -174,7 +176,7 @@ watch(() => route.path, (newPath) => {
             <i v-if="route.children" class="arrow-icon" :class="{ 'rotated': activeSubMenuId === route.path }">▼</i>
           </div>
 
-          <div v-if="route.children" class="sub-menu" :class="{ 'visible': activeSubMenuId === route.path }">
+          <div v-if="route.children" class="sub-menu card" style="padding: 5px;" :class="{ 'visible': activeSubMenuId === route.path }">
             <div v-for="child in route.children" :key="child.path" class="sub-menu-item"
               :class="{ 'active': activeSubmenu === child.path }" @click="handleSubMenuClick(route.path, child)">
               <span class="sub-menu-icon" :class="child.iconClass">{{ child.icon }}</span>
@@ -214,6 +216,7 @@ watch(() => route.path, (newPath) => {
 </template>
 
 <style scoped>
+
 .dashboard-header {
   position: fixed;
   top: 0;
@@ -238,7 +241,7 @@ watch(() => route.path, (newPath) => {
 }
 
 .header-content {
-  max-width: 1200px;
+  max-width:  var(--content-width);
   margin: 0 auto;
   height: 100%;
   display: flex;
