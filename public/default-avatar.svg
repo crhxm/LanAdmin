@@ -1,0 +1,14 @@
+<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景圆圈 -->
+  <circle cx="100" cy="100" r="100" fill="#42b883"/>
+  
+  <!-- 头部 -->
+  <circle cx="100" cy="85" r="40" fill="white"/>
+  
+  <!-- 身体 -->
+  <path d="M100 135 
+           C 60 135, 40 175, 40 200
+           L 160 200
+           C 160 175, 140 135, 100 135" 
+        fill="white"/>
+</svg> 

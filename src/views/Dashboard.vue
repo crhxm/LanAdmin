@@ -1,0 +1,72 @@
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import DashboardHeader from '../components/DashboardHeader.vue'
+import SideNav from '../components/SideNav.vue'
+import api from '../api'
+
+const router = useRouter()
+const userInfo = ref(null)
+
+// 获取用户信息
+const getUserInfo = async () => {
+  try {
+    const res = await api.auth.checkLoginStatus()
+    if (res.data.isLoggedIn) {
+      userInfo.value = res.data.userInfo
+    }
+  } catch (error) {  
+    console.error('获取用户信息失败:', error)
+  }
+}
+
+onMounted(() => {
+  getUserInfo()
+})
+</script>
+
+<template>
+  <div class="container">
+    <DashboardHeader />
+    
+    <div class="dashboard">
+      <!-- <SideNav :user-info="userInfo" /> -->
+      <SideNav v-if="userInfo" :user-info="userInfo" />
+
+      <div class="main-content">
+        <router-view></router-view>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+.dashboard {
+  display: flex;
+  min-height: calc(100vh - 64px);
+  margin-top: 64px;
+  width: 100%;
+  position: relative;
+}
+
+.main-content {
+  flex: 1;
+  padding: 2rem;
+  background: var(--bg-light);
+  
+  min-width: 0;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .dashboard {
+    flex-direction: column;
+  }
+
+  .main-content {
+    margin-left: 0;
+    width: 100%;
+    padding: 1rem;
+  }
+}
+</style>

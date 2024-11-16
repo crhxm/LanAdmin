@@ -1,0 +1,140 @@
+/* 只保留全局变量和基础重置样式 */
+:root {
+  /* 字体颜色系统 */
+  --font-color-primary: #2c3e50;
+  --font-color-secondary: #34495e;
+  --font-color-regular: #3a4a5c;
+  --font-color-light: #486181;
+  --font-color-lighter: #5c7999;
+  --font-color-white: #ffffff;
+  
+  /* 主题色系统 */
+  --primary: #42b883;
+  --primary-light: #65c89b;
+  --primary-lighter: #88d8b4;
+  --primary-dark: #379f6e;
+  
+  /* 功能色 */
+  --success: #2ea043;
+  --success-light: #3fb950;
+  --warning: #d29922;
+  --warning-light: #e2a93b;
+  --danger: #d83a3a;
+  --danger-light: #e25555;
+  --info: #4a5568;
+  --info-light: #718096;
+
+  /* 布局尺寸 */
+  --header-height: 64px;
+  --sidebar-width: 260px;
+  --content-width: 1500px;
+  
+  /* 间距 */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 2rem;
+  --spacing-xl: 3rem;
+  
+  /* 圆角 */
+  --border-radius-sm: 4px;
+  --border-radius: 8px;
+  --border-radius-lg: 12px;
+  
+  /* 阴影 */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
+
+  /* 主题色系统 - 默认绿色主题 */
+  --theme-green: #42b883;
+  --theme-green-light: #65c89b;
+  --theme-green-lighter: #88d8b4;
+  --theme-green-dark: #379f6e;
+
+  /* 蓝色主题 */
+  --theme-blue: #409eff;
+  --theme-blue-light: #69b1ff;
+  --theme-blue-lighter: #8cc5ff;
+  --theme-blue-dark: #337ecc;
+
+  /* 紫色主题 */
+  --theme-purple: #9c27b0;
+  --theme-purple-light: #b44fd0;
+  --theme-purple-lighter: #cc77e0;
+  --theme-purple-dark: #7b1fa2;
+
+  /* 粉色主题 */
+  --theme-pink: #e91e63;
+  --theme-pink-light: #ed4b82;
+  --theme-pink-lighter: #f178a1;
+  --theme-pink-dark: #c2185b;
+
+  /* 橙色主题 */
+  --theme-orange: #ff9800;
+  --theme-orange-light: #ffad33;
+  --theme-orange-lighter: #ffc266;
+  --theme-orange-dark: #cc7a00;
+
+  /* 红色主题 */
+  --theme-red: #f44336;
+  --theme-red-light: #f6665c;
+  --theme-red-lighter: #f88982;
+  --theme-red-dark: #c4352b;
+
+  /* 青色主题 */
+  --theme-cyan: #00bcd4;
+  --theme-cyan-light: #33c9dc;
+  --theme-cyan-lighter: #66d7e5;
+  --theme-cyan-dark: #0097a7;
+
+  /* 当前激活的主题色 - 默认使用绿色 */
+  --primary: var(--theme-green);
+  --primary-light: var(--theme-green-light);
+  --primary-lighter: var(--theme-green-lighter);
+  --primary-dark: var(--theme-green-dark);
+}
+
+/* 基础重置 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  line-height: 1.6;
+  color: var(--font-color-primary);
+  background: var(--bg-primary);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* 暗色主题变量 */
+[data-theme="dark"] {
+  --font-color-primary: #e6e6e6;
+  --font-color-secondary: #cccccc;
+  --font-color-regular: #b3b3b3;
+  --font-color-light: #999999;
+  --font-color-lighter: #808080;
+  
+  --bg-primary: #2a2d3e;
+  --bg-light: #2f3349;
+  --bg-dark: #252837;
+  --bg-darker: #1f2129;
+  
+  --border-color: #363b54;
+  
+  --primary: #4cc591;
+  --primary-light: #6fd1a4;
+  --primary-lighter: #92ddbc;
+  --primary-dark: #3eb077;
+  
+  background-color: var(--bg-dark);
+  color: var(--font-color-primary);
+}

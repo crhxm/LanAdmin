@@ -1,0 +1,15 @@
+<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景圆 -->
+  <circle cx="100" cy="100" r="98" fill="#7f8c8d"/>
+  <!-- 头部 -->
+  <circle cx="100" cy="85" r="35" fill="#ecf0f1"/>
+  <!-- 身体 -->
+  <path d="M100 130 
+           C 60 130, 40 170, 40 200
+           L 160 200
+           C 160 170, 140 130, 100 130" 
+        fill="#ecf0f1"/>
+  <!-- 装饰 -->
+  <circle cx="80" cy="80" r="3" fill="#95a5a6"/>
+  <circle cx="120" cy="80" r="3" fill="#95a5a6"/>
+</svg> 

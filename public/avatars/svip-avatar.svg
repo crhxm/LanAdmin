@@ -1,0 +1,19 @@
+<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景圆 -->
+  <circle cx="100" cy="100" r="98" fill="#8e44ad"/>
+  <!-- 发光效果 -->
+  <circle cx="100" cy="100" r="90" fill="none" stroke="#e056fd" stroke-width="3"/>
+  <!-- 头部 -->
+  <circle cx="100" cy="85" r="35" fill="#ecf0f1"/>
+  <!-- 身体 -->
+  <path d="M100 130 
+           C 60 130, 40 170, 40 200
+           L 160 200
+           C 160 170, 140 130, 100 130" 
+        fill="#ecf0f1"/>
+  <!-- SVIP标志 -->
+  <path d="M75 50 L100 35 L125 50 L115 65 L100 50 L85 65 Z" fill="#e056fd"/>
+  <!-- 装饰 -->
+  <circle cx="70" cy="70" r="3" fill="#e056fd"/>
+  <circle cx="130" cy="70" r="3" fill="#e056fd"/>
+</svg> 
