@@ -70,9 +70,17 @@ const handleHomeClick = (e) => {
   router.push('/')
 }
 
-const handleAuthClick = (e) => {
+const handleAuthClick = (e, type = 'login') => {
   e.preventDefault()
-  router.push('/auth')
+  // 通过 query 参数指定是登录还是注册
+  router.push({
+    path: '/auth',
+    query: { type }
+  })
+}
+
+const handleRegisterClick = (e) => {
+  handleAuthClick(e, 'register')
 }
 
 const handleDashboard = () => {
@@ -129,26 +137,43 @@ onMounted(() => {
 <template>
   <nav class="nav">
     <div class="nav-content">
-      <h1>
-        <a href="#" @click="handleHomeClick" class="logo-link">LanGame</a>
-      </h1>
-      <nav class="nav-home">
-        <!-- <a href="#hero" @click="handleHomeClick" class="nav-home"> -->
+      <!-- 左侧 Logo -->
+      <div class="nav-left">
+        <h1>
+          <a href="#" @click="handleHomeClick" class="logo-link">LanGame</a>
+        </h1>
+      </div>
 
-        <a href="#hero" @click="(e) => handleNavClick(e, '/#hero')" class="nav-home">
+      <!-- 中间导航菜单 -->
+      <div class="nav-center">
+        <a href="#hero" @click="(e) => handleNavClick(e, '/#hero')" class="nav-link">
           <i class="icon-home">🏠</i>
-          主页
+          <span>主页</span>
         </a>
-        <a href="#features" @click="(e) => handleNavClick(e, '/#features')">功能</a>
-        <a href="#download" @click="(e) => handleNavClick(e, '/#download')">下载</a>
-        <a href="#docs" @click="(e) => handleNavClick(e, '/#docs')">文档</a>
-        <a href="#about" @click="(e) => handleNavClick(e, '/#about')">关于</a>
+        <a href="#features" @click="(e) => handleNavClick(e, '/#features')" class="nav-link">
+          <i class="icon-features">⚡</i>
+          <span>功能</span>
+        </a>
+        <a href="#download" @click="(e) => handleNavClick(e, '/#download')" class="nav-link">
+          <i class="icon-download">📥</i>
+          <span>下载</span>
+        </a>
+        <a href="#docs" @click="(e) => handleNavClick(e, '/#docs')" class="nav-link">
+          <i class="icon-docs">📚</i>
+          <span>文档</span>
+        </a>
+        <a href="#about" @click="(e) => handleNavClick(e, '/#about')" class="nav-link">
+          <i class="icon-about">ℹ️</i>
+          <span>关于</span>
+        </a>
+      </div>
 
-
+      <!-- 右侧用户信息 -->
+      <div class="nav-right">
         <!-- 用户未登录显示登录注册按钮 -->
         <div class="auth-links" v-if="!isLoggedIn">
-          <a href="#" @click="handleAuthClick">登录</a>
-          <a href="#" @click="handleAuthClick">注册</a>
+          <a href="#" @click="(e) => handleAuthClick(e, 'login')" class="btn btn-text">登录</a>
+          <a href="#" @click="(e) => handleAuthClick(e, 'register')" class="btn btn-primary">免费注册</a>
         </div>
 
         <!-- 用户已登录显示用户信息 -->
@@ -181,13 +206,13 @@ onMounted(() => {
             </a>
           </div>
         </div>
-      </nav>
+      </div>
     </div>
   </nav>
 </template>
 
 <style scoped>
-/* 导航栏容器 */
+/* 导航栏基础样式 */
 .nav {
   height: var(--header-height);
   width: 100%;
@@ -213,7 +238,11 @@ onMounted(() => {
   justify-content: space-between;
 }
 
-/* Logo 样式 */
+/* 左侧 Logo */
+.nav-left {
+  flex: 0 0 200px; /* 固定宽度 */
+}
+
 .logo-link {
   text-decoration: none;
   color: var(--font-color-primary);
@@ -222,19 +251,16 @@ onMounted(() => {
   transition: color 0.3s ease;
 }
 
-.logo-link:hover {
-  color: var(--primary);
-}
-
-/* 导航链接容器 */
-nav {
+/* 中间导航菜单 */
+.nav-center {
+  flex: 1;
   display: flex;
+  justify-content: center;
   align-items: center;
   gap: var(--spacing-md);
 }
 
-/* 导航链接通用样式 */
-nav a {
+.nav-center a {
   text-decoration: none;
   color: var(--font-color-regular);
   padding: 0.5rem 0.8rem;
@@ -243,41 +269,16 @@ nav a {
   font-weight: 500;
 }
 
-nav a:hover {
+.nav-center a:hover {
   color: var(--primary);
   background: var(--nav-hover-bg);
 }
 
-/* 主页链接样式 */
-.nav-home {
+/* 右侧用户信息 */
+.nav-right {
+  /*flex: 0 0 200px;  固定宽度 */
   display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
-}
-
-.icon-home {
-  font-size: 1.2rem;
-}
-
-/* 认证链接区域 */
-.auth-links {
-  display: flex;
-  gap: var(--spacing-sm);
-  margin-left: var(--spacing-md);
-}
-
-.auth-links a {
-  padding: 0.5rem 1rem;
-  border-radius: var(--border-radius);
-}
-
-.auth-links a:last-child {
-  background: var(--primary);
-  color: var(--font-color-white);
-}
-
-.auth-links a:last-child:hover {
-  background: var(--primary-light);
+  justify-content: flex-end;
 }
 
 /* 用户信息区域 */
@@ -416,39 +417,133 @@ nav a:hover {
 
 /* 响应式调整 */
 @media (max-width: 768px) {
-  .nav-content {
-    padding: 0 var(--spacing-md);
+  .nav-left {
+    flex: 0 0 100px;
   }
-
-  nav {
+  
+  .nav-right {
+    flex: 0 0 100px;
+  }
+  
+  .nav-center {
     gap: var(--spacing-sm);
   }
-
-  nav a {
-    padding: 0.5rem;
-  }
-
+  
   .username {
     display: none;
   }
+}
 
-  .auth-links {
-    margin-left: var(--spacing-sm);
+/* 导航链接样式优化 */
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  color: var(--font-color-regular);
+  padding: 8px 16px;
+  border-radius: var(--border-radius);
+  transition: all 0.3s ease;
+  font-weight: 500;
+  position: relative;
+}
+
+.nav-link:hover {
+  color: var(--primary);
+  background: var(--nav-hover-bg);
+  transform: translateY(-1px);
+}
+
+.nav-link i {
+  font-size: 1.1rem;
+  opacity: 0.8;
+}
+
+.nav-link span {
+  font-size: 0.95rem;
+}
+
+/* 登录注册按钮样式 */
+.auth-links {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn {
+  padding: 8px 20px;
+  border-radius: var(--border-radius);
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn-text {
+  color: var(--font-color-regular);
+  background: transparent;
+}
+
+.btn-text:hover {
+  color: var(--primary);
+  background: var(--nav-hover-bg);
+}
+
+.btn-primary {
+  color: white;
+  background: var(--primary);
+  border: 1px solid var(--primary);
+}
+
+.btn-primary:hover {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(var(--primary-rgb), 0.25);
+}
+
+/* 暗色主题适配 */
+[data-theme="dark"] {
+  .nav-link {
+    color: var(--font-color-secondary);
   }
 
-  .user-menu {
-    right: -1rem;
-    width: 200px;
+  .nav-link:hover {
+    color: var(--primary-light);
+  }
+
+  .btn-text {
+    color: var(--font-color-secondary);
+  }
+
+  .btn-text:hover {
+    color: var(--primary-light);
+    background: var(--nav-hover-bg);
+  }
+
+  .btn-primary {
+    background: var(--primary);
+    border-color: var(--primary);
+  }
+
+  .btn-primary:hover {
+    background: var(--primary-light);
   }
 }
 
-@media (max-width: 100px) {
-  .nav a:not(.logo-link):not(.nav-home) {
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .nav-link {
+    padding: 8px 12px;
+  }
+
+  .nav-link span {
     display: none;
   }
 
-  .auth-links {
-    display: flex;
+  .btn {
+    padding: 6px 12px;
+    font-size: 0.9rem;
   }
 }
 </style>

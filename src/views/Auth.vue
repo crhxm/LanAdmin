@@ -1,10 +1,11 @@
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, onMounted, watch } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import NavBar from '../components/NavBar.vue'
 import api from '../api'
 
 const router = useRouter()
+const route = useRoute()
 const isLogin = ref(true)
 const username = ref('')
 const password = ref('')
@@ -12,12 +13,45 @@ const confirmPassword = ref('')
 const loading = ref(false)
 const errorMsg = ref('')
 
-const toggleAuth = () => {
-  isLogin.value = !isLogin.value
+// 根据路由参数设置初始表单类型
+onMounted(() => {
+  const { type } = route.query
+  if (type === 'register') {
+    isLogin.value = false
+  } else {
+    isLogin.value = true
+  }
+})
+
+// 监听路由变化
+watch(
+  () => route.query.type,
+  (newType) => {
+    if (newType === 'register') {
+      isLogin.value = false
+    } else {
+      isLogin.value = true
+    }
+    // 清空表单
+    resetForm()
+  }
+)
+
+// 重置表单
+const resetForm = () => {
   username.value = ''
   password.value = ''
   confirmPassword.value = ''
   errorMsg.value = ''
+}
+
+const toggleAuth = () => {
+  // 通过更新路由参数来切换表单
+  const type = isLogin.value ? 'register' : 'login'
+  router.push({ 
+    path: '/auth', 
+    query: { type } 
+  })
 }
 
 const handleSubmit = async () => {
@@ -43,9 +77,11 @@ const handleSubmit = async () => {
       })
       console.log('注册成功:', res)
       // 注册成功后自动切换到登录
-      isLogin.value = true
-      username.value = ''
-      password.value = ''
+      router.push({ 
+        path: '/auth', 
+        query: { type: 'login' } 
+      })
+      resetForm()
     }
   } catch (error) {
     console.error(error)

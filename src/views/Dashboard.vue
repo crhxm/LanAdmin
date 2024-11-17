@@ -7,12 +7,12 @@ import api from '../api'
 
 const router = useRouter()
 const userInfo = ref(null)
-
 // 获取用户信息
 const getUserInfo = async () => {
   try {
     const res = await api.auth.checkLoginStatus()
     if (res.data.isLoggedIn) {
+      console.log("res.data.userInfo", res.data.userInfo);
       userInfo.value = res.data.userInfo
     }
   } catch (error) {  

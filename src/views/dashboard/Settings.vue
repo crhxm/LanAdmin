@@ -138,122 +138,6 @@ onMounted(() => {
     </div>
   </div>
 </template>
-<!-- 
-<style scoped>
-@import '../../components/styles/form.css';
-/* 只保留特定样式 */
-.theme-card {
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.theme-card:hover {
-  transform: translateY(-2px);
-}
-
-.theme-card.active {
-  border-color: var(--primary);
-  background: rgba(66, 184, 131, 0.5);
-}
-
-.theme-icon {
-  font-size: 1.5rem;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.theme-info {
-  flex: 1;
-}
-
-.theme-colors {
-  margin-top: 1rem;
-}
-
-.color-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 1rem;
-  cursor: pointer;
-  border-radius: var(--border-radius);
-  transition: all 0.3s ease;
-}
-
-.color-card:hover {
-  transform: translateY(-2px);
-}
-
-
-
-
-.color-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-  color: white;
-  transition: transform 0.3s ease;
-}
-
-.color-card:hover .color-icon {
-  transform: scale(1.1);
-}
-
-.color-name {
-  font-size: 0.9rem;
-  color: var(--font-color-regular);
-}
-
-.mt-4 {
-  margin-top: 1.5rem;
-}
-
-
-
-/* 主题颜色选择样式 */
-.color-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 1rem;
-  cursor: pointer;
-  border-radius: var(--border-radius);
-  transition: all 0.3s ease;
-}
-
-.color-card.active {
-  background: rgba(66, 184, 131, 0.5); /* 选中颜色的背景 */
-}
-
-.color-card:hover {
-  transform: translateY(-2px);
-}
-
-.color-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-  color: white;
-  transition: transform 0.3s ease;
-}
-
-.color-card:hover .color-icon {
-  transform: scale(1.1);
-} 
-</style>  -->
 
 
 <style scoped>
@@ -270,8 +154,9 @@ onMounted(() => {
 }
 
 .theme-card.active {
-  border-color: var(--primary);
-  background: rgba(66, 184, 131, 0.5);
+  /* border-color: var(--primary); */
+  /* background: rgba(66, 184, 131, 0.5); */
+  background: var(--primary-lighter);
 }
 
 /* 主题图标样式 */
@@ -307,6 +192,7 @@ onMounted(() => {
 
 .color-card.active {
   background: rgba(66, 184, 131, 0.5); /* 选中颜色的背景 */
+  background: var(--primary-lighter);
 }
 
 .color-card:hover {

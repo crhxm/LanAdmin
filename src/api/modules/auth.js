@@ -107,34 +107,13 @@ export default {
   // 用户登录
   login(data) {
     return new Promise(async (resolve, reject) => {
-      //console.log(JSON.stringify({ username: data.username, password: data.password }));
-      // 请求url = "http://localhost:5173/auth/login" 
-      const url = "http://localhost:5173/auth/login";
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ username: data.username, password: data.password })
-      });
+      const account = TEST_ACCOUNTS.find(account => account.username === data.username && account.password === data.password);
+      console.log("account", account);
 
-      const result = await response.json();
-
-
-
-      const  account = TEST_ACCOUNTS.find(acc => acc.username === data.username && acc.password === data.password);
-      console.log("account",account);
-
-      if (result) {
-        const userInfo = {
-          username: result.username,
-          password: result.password,
-          token: 'admin_token',
-          userInfo: result
-         };      
-
+      if (account) {
+        const userInfo = account.userInfo;     
         // 存储 token 和用户信息
-        localStorage.setItem('token',userInfo.token);
+        localStorage.setItem('token', account.token);
         localStorage.setItem('userInfo', JSON.stringify(userInfo));
 
         resolve({
