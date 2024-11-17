@@ -33,7 +33,7 @@ onMounted(() => {
       <!-- <SideNav :user-info="userInfo" /> -->
       <SideNav v-if="userInfo" :user-info="userInfo" />
 
-      <div class="main-content">
+      <div class="main-content card">
         <router-view></router-view>
       </div>
     </div>
@@ -44,7 +44,7 @@ onMounted(() => {
 .dashboard {
   display: flex;
   min-height: calc(100vh - 64px);
-  margin-top: 64px;
+  margin-top: 10px;
   width: 100%;
   position: relative;
 }

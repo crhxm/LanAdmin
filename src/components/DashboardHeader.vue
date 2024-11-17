@@ -3,6 +3,7 @@ import { ref, onMounted, onUnmounted, computed, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { routes } from '../config/routes'
 import api from '../api'
+import MenuManager from '../utils/menuManager'
 
 const router = useRouter()
 const route = useRoute()
@@ -15,6 +16,27 @@ const isHeaderVisible = ref(true)
 const activeMenu = ref('')
 const activeSubmenu = ref('')
 const activeSubMenuId = ref(null)
+const menuSettings = ref(MenuManager.getMenuSettings())
+
+// 监听菜单设置变化
+const handleMenuSettingsChange = (event) => {
+  menuSettings.value = event.detail
+  console.log('Header menu settings updated:', menuSettings.value)
+}
+
+// 添加和移除滚动监听
+onMounted(() => {
+  //window.addEventListener('scroll', handleScroll)
+  checkLoginStatus()
+  // 添加菜单设置变化监听
+  window.addEventListener('menuSettingsChanged', handleMenuSettingsChange)
+})
+
+onUnmounted(() => {
+  //window.removeEventListener('scroll', handleScroll)
+  // 移除菜单设置变化监听
+  window.removeEventListener('menuSettingsChanged', handleMenuSettingsChange)
+})
 
 // 处理滚动事件
 const handleScroll = () => {
@@ -36,16 +58,6 @@ const handleScroll = () => {
 
   lastScrollTop.value = currentScrollTop
 }
-
-// 添加和移除滚动监听
-onMounted(() => {
-  window.addEventListener('scroll', handleScroll)
-  checkLoginStatus()
-})
-
-onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll)
-})
 
 // 处理菜单显示
 const handleMenuEnter = () => {
@@ -152,16 +164,20 @@ watch(() => route.path, (newPath) => {
 </script>
 
 <template>
-  <header class="dashboard-header" :class="{
-    'scrolled': isScrolled,
-    'header-hidden': !isHeaderVisible
-  }">
+  <header 
+    v-if="menuSettings.showTopMenu || menuSettings.menuPosition === 'top' || menuSettings.menuPosition === 'both'"
+    class="dashboard-header" 
+    :class="{
+      'scrolled': isScrolled,
+      'header-hidden': !isHeaderVisible
+    }"
+  >
     <div class="header-content">
       <!-- Logo区域 -->
       <div class="header-left">
         <h1>
           <a href="#" @click.prevent="handleHomeClick" class="logo-link">
-            CodeEditor
+          GameAdmin v1.0{{ version }}
           </a>
         </h1>
       </div>
@@ -218,7 +234,7 @@ watch(() => route.path, (newPath) => {
 <style scoped>
 
 .dashboard-header {
-  position: fixed;
+  /* position: fixed; */
   top: 0;
   left: 0;
   right: 0;

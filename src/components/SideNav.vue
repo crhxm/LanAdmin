@@ -1,7 +1,8 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted, onUnmounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { routes } from '../config/routes'
+import MenuManager from '../utils/menuManager'
 
 const router = useRouter()
 const route = useRoute()
@@ -51,56 +52,77 @@ const handleSubMenuClick = (parentPath, childPath) => {
 const isMenuExpanded = (key) => {
   return expandedMenus.value.includes(key)
 }
+
+const menuSettings = ref(MenuManager.getMenuSettings())
+
+// 监听菜单设置变化
+const handleMenuSettingsChange = (event) => {
+  menuSettings.value = event.detail
+  console.log('Side menu settings updated:', menuSettings.value)
+}
+
+onMounted(() => {
+  window.addEventListener('menuSettingsChanged', handleMenuSettingsChange)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('menuSettingsChanged', handleMenuSettingsChange)
+})
 </script>
 
 <template>
-  <div class=" card sidebar">
-    <div class="user-profile">
-      <img :src="userInfo?.avatar" alt="用户头像" class="avatar">
-      <div class="user-info">
-        <h3>{{ userInfo?.nickname || userInfo?.username }}</h3>
-        <span class="role">{{ userInfo?.role === 'admin' ? '管理员' : '用户' }}</span>
-      </div>
-    </div>
-
-    <nav class="menu">
-      <div v-for="(route, key) in routes" :key="key" class="menu-item-wrapper">
-        <!-- 主菜单项 -->
-        <a 
-          href="#"
-          @click.prevent="handleMenuClick(route, key)"
-          :class="{ 
-            active: activeMenu === route.path,
-            'has-children': route.children
-          }"
-        >
-          <i :class="route.iconClass">{{ route.icon }}</i>
-          {{ route.name }}
-          <i v-if="route.children" 
-             class="arrow-icon"
-             :class="{ expanded: isMenuExpanded(key) }">
-            ▼
-          </i>
-        </a>
-
-        <!-- 子菜单 -->
-        <div v-if="route.children" 
-             class="submenu"
-             :class="{ expanded: isMenuExpanded(key) }">
-          <a 
-            v-for="child in route.children"
-            :key="child.path"
-            href="#"
-            @click.prevent="handleSubMenuClick(route.path, child.path)"
-            :class="{ active: activeMenu === child.path }"
-          >
-            <i :class="child.iconClass">{{ child.icon }}</i>
-            {{ child.name }}
-          </a>
+  <nav 
+    v-if="menuSettings.showSideMenu || menuSettings.menuPosition === 'side' || menuSettings.menuPosition === 'both'"
+    class="side-nav"
+  >
+    <div class=" card sidebar">
+      <div class="user-profile">
+        <img :src="userInfo?.avatar" alt="用户头像" class="avatar">
+        <div class="user-info">
+          <h3>{{ userInfo?.nickname || userInfo?.username }}</h3>
+          <span class="role">{{ userInfo?.role === 'admin' ? '管理员' : '用户' }}</span>
         </div>
       </div>
-    </nav>
-  </div>
+
+      <nav class="menu">
+        <div v-for="(route, key) in routes" :key="key" class="menu-item-wrapper">
+          <!-- 主菜单项 -->
+          <a 
+            href="#"
+            @click.prevent="handleMenuClick(route, key)"
+            :class="{ 
+              active: activeMenu === route.path,
+              'has-children': route.children
+            }"
+          >
+            <i :class="route.iconClass">{{ route.icon }}</i>
+            {{ route.name }}
+            <i v-if="route.children" 
+               class="arrow-icon"
+               :class="{ expanded: isMenuExpanded(key) }">
+              ▼
+            </i>
+          </a>
+
+          <!-- 子菜单 -->
+          <div v-if="route.children" 
+               class="submenu"
+               :class="{ expanded: isMenuExpanded(key) }">
+            <a 
+              v-for="child in route.children"
+              :key="child.path"
+              href="#"
+              @click.prevent="handleSubMenuClick(route.path, child.path)"
+              :class="{ active: activeMenu === child.path }"
+            >
+              <i :class="child.iconClass">{{ child.icon }}</i>
+              {{ child.name }}
+            </a>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </nav>
 </template>
 
 <style scoped>
@@ -108,12 +130,14 @@ const isMenuExpanded = (key) => {
 .sidebar {
   width: 250px;
   min-width: 200px;
-
+  /* position: fixed; */
   background: var(--bg-primary);
   border-right: 1px solid var(--border-color);
   padding: 1.5rem;
-  height: calc(100vh - 100px);
-  margin-top: 30px;
+  /* height: calc(100vh - 100px); */
+  min-height: 100%;
+  margin-top: 2px;
+  margin-right: 10px;
   overflow-y: auto;
   
   z-index: 90;

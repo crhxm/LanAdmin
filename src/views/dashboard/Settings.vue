@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { ThemeManager } from '../../utils/theme'
+import MenuManager from '../../utils/menuManager'
 
 const settings = ref({
   systemName: 'CodeEditor',
@@ -17,10 +18,22 @@ const settings = ref({
   languages: [
     { id: 'zh_CN', name: '简体中文' },
     { id: 'en_US', name: 'English' }
-  ]
+  ],
+  menuSettings: {
+    showTopMenu: true,
+    showSideMenu: true,
+    menuPosition: 'top',
+    menuPositions: [
+      { id: 'top', name: '顶部菜单', icon: '⬆️' },
+      { id: 'side', name: '侧边菜单', icon: '➡️' },
+      { id: 'both', name: '双菜单', icon: '⚡' }
+    ]
+  }
 })
 
 const handleSave = () => {
+  // 保存菜单设置
+  MenuManager.saveMenuSettings(settings.value.menuSettings)
   console.log('保存设置:', settings.value)
 }
 
@@ -34,9 +47,19 @@ const handleThemeColorChange = (themeId) => {
   ThemeManager.setThemeColor(themeId)
 }
 
+const handleMenuSettingChange = (setting, value) => {
+  settings.value.menuSettings[setting] = value
+  MenuManager.saveMenuSettings(settings.value.menuSettings)
+}
+
 onMounted(() => {
   settings.value.themeMode = ThemeManager.getThemeMode()
   settings.value.themeColor = ThemeManager.getThemeColor()
+  const menuSettings = MenuManager.getMenuSettings()
+  settings.value.menuSettings = {
+    ...settings.value.menuSettings,
+    ...menuSettings
+  }
 })
 </script>
 
@@ -52,7 +75,7 @@ onMounted(() => {
       <div class="card">
         <h3 class="subtitle">基础设置</h3>
         <div class="form-section">
-          <div class="form-group">
+          <!-- <div class="form-group">
             <label>系统名称</label>
             <input 
               type="text" 
@@ -74,7 +97,7 @@ onMounted(() => {
               >
                 {{ lang.name }}
               </option>
-            </select>
+            </select> 
           </div>
 
           <div class="form-group">
@@ -91,7 +114,7 @@ onMounted(() => {
                 {{ size }}px
               </option>
             </select>
-          </div>
+          </div>-->
         </div>
       </div>
 
@@ -133,6 +156,38 @@ onMounted(() => {
             </div>
             <div class="color-name">{{ theme.name }}</div>
           </div>
+        </div>
+      </div>
+
+      <!-- 菜单设置 -->
+      <div class="card">
+        <h3 class="subtitle">菜单设置</h3>
+        <div class="menu-settings">
+          <!-- 菜单位置选择 -->
+          <div class="form-section">
+            <!-- <h4 class="section-title">菜单位置</h4> -->
+            <div class="menu-position-options grid grid-3">
+              <div
+                v-for="position in settings.menuSettings.menuPositions"
+                :key="position.id"
+                class="position-card card"
+                :class="{ active: settings.menuSettings.menuPosition === position.id }"
+                @click="handleMenuSettingChange('menuPosition', position.id)"
+              >
+                <div class="position-icon">{{ position.icon }}</div>
+                <div class="position-info">
+                  <h4>{{ position.name }}</h4>
+                  <span class="text-light">
+                    {{ settings.menuSettings.menuPosition === position.id ? '当前使用' : '点击切换' }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+
         </div>
       </div>
     </div>
@@ -223,5 +278,90 @@ onMounted(() => {
 
 .mt-4 {
   margin-top: 1.5rem;
+}
+
+/* 添加菜单设置相关样式 */
+.menu-settings {
+  padding: 1rem 0;
+}
+
+.section-title {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  color: var(--font-color-primary);
+}
+
+.menu-position-options {
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.position-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.position-card:hover {
+  transform: translateY(-2px);
+}
+
+.position-card.active {
+  background: var(--primary-lighter);
+}
+
+.position-icon {
+  font-size: 1.5rem;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.position-info h4 {
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.menu-toggles {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.toggle-label input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+}
+
+.toggle-text {
+  font-size: 0.95rem;
+  color: var(--font-color-regular);
+}
+
+/* 暗色主题��配 */
+[data-theme="dark"] {
+  .position-card.active {
+    background: var(--primary-darker);
+  }
+
+  .section-title {
+    color: var(--font-color-white);
+  }
+
+  .toggle-text {
+    color: var(--font-color-secondary);
+  }
 }
 </style>

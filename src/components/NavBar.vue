@@ -140,7 +140,7 @@ onMounted(() => {
       <!-- 左侧 Logo -->
       <div class="nav-left">
         <h1>
-          <a href="#" @click="handleHomeClick" class="logo-link">LanGame</a>
+          <a href="#" @click="handleHomeClick" class="logo-link">LanAdmin</a>
         </h1>
       </div>
 
