@@ -26,14 +26,14 @@ const handleMenuSettingsChange = (event) => {
 
 // 添加和移除滚动监听
 onMounted(() => {
-  //window.addEventListener('scroll', handleScroll)
+  window.addEventListener('scroll', handleScroll)
   checkLoginStatus()
   // 添加菜单设置变化监听
   window.addEventListener('menuSettingsChanged', handleMenuSettingsChange)
 })
 
 onUnmounted(() => {
-  //window.removeEventListener('scroll', handleScroll)
+  window.removeEventListener('scroll', handleScroll)
   // 移除菜单设置变化监听
   window.removeEventListener('menuSettingsChanged', handleMenuSettingsChange)
 })
@@ -177,7 +177,7 @@ watch(() => route.path, (newPath) => {
       <div class="header-left">
         <h1>
           <a href="#" @click.prevent="handleHomeClick" class="logo-link">
-          GameAdmin v1.0{{ version }}
+          GameAdmin v1.0
           </a>
         </h1>
       </div>

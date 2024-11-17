@@ -63,7 +63,8 @@ export const getDashboardRoutes = () => {
     // 添加主路由
     allRoutes.push({
       path: route.path,
-      name: key,
+      name: route.name,
+      componentPath: route.componentPath,
       component: () => {
         if (route.componentPath.includes('/')) {
           const [folder, file] = route.componentPath.split('/')
@@ -78,7 +79,8 @@ export const getDashboardRoutes = () => {
       route.children.forEach(child => {
         allRoutes.push({
           path: `${route.path}/${child.path}`,
-          name: `${route.path}-${child.path}`,
+          name: `${route.name}-${child.name}`,
+          componentPath: child.componentPath,
           component: () => {
             const [folder, file] = child.componentPath.split('/')
             return import(`../views/dashboard/${folder}/${file}.vue`)

@@ -71,7 +71,7 @@ const handleTryOnline = async () => {
             </div>
             <div class="feature-card">
               <i class="icon-debug"></i>
-              <h3>调试工具</h3>
+              <h3>调试��具</h3>
               <p>集成断点调试、变量监视等功能，快速定位问题</p>
             </div>
           </div>

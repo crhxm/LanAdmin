@@ -350,7 +350,7 @@ onMounted(() => {
   color: var(--font-color-regular);
 }
 
-/* 暗色主题��配 */
+/* 暗色主题配 */
 [data-theme="dark"] {
   .position-card.active {
     background: var(--primary-darker);
