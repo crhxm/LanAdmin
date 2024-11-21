@@ -145,7 +145,13 @@ onMounted(() => {
                     <div class="form-section">
                         <div class="form-group">
                             <label>当前密码</label>
-                            <input type="password" v-model="passwordForm.oldPassword" class="form-control">
+                            <input type="password" v-model="passwordForm.oldPassword" class="form-control" id="oldPassword">
+                            <label for="oldPassword">什么设置</label>
+                            <div class="form-group">
+                                <label>当前密码</label>
+                                <input type="password" v-model="passwordForm.oldPassword" class="form-control">
+                            </div>
+                           
                         </div>
                         <div class="form-group">
                             <label>新密码</label>

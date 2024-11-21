@@ -10,7 +10,7 @@ input {
   width: 100%;
   padding: 0.8rem 1rem;
   border: 2px solid var(--border-color);
-  border-radius: var(--border-radius);
+  border-radius: var(--border-radius-sm);
   font-size: 1rem;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
@@ -60,3 +60,16 @@ input::placeholder {
 .color-card:hover .color-icon {
   transform: scale(1.1);
 } 
+
+.form-group {
+  display: grid;
+  grid-template-columns: 80px 1fr; /* 标签固定宽度，输入框自适应 */
+  align-items: center;
+  gap: 1rem;
+  padding: 5px 5px;
+}
+
+/* 如果label需要固定宽度，可以这样设置 */
+.form-group-fixed-label {
+  grid-template-columns: 100px 1fr; /* 第一列固定宽度，第二列自适应 */
+}

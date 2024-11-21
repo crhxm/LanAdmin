@@ -40,7 +40,7 @@ export const routes = {
         name: '账号管理',
         componentPath: 'system/Accounts',
         icon: '👤',
-        iconClass: 'icon-accounts'
+        iconClass: 'icon-accounts'        
       }
     ]
   },

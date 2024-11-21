@@ -67,7 +67,7 @@ onMounted(() => {
 
 .page-content {
   flex: 1;
-  padding: 2rem;
+  padding: 1rem;
   background: var(--bg-light);
 }
 

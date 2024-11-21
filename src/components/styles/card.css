@@ -3,7 +3,7 @@
   background: var(--bg-primary);
   border-radius: var(--border-radius-sm);
   box-shadow: var(--shadow);
-  padding: var(--spacing-lg);
+  padding: var(--spacing-md);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 

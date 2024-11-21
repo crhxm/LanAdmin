@@ -163,7 +163,7 @@ addTab('/dashboard/overview')
 .tab.active {
   background: var(--primary-lighter);
   border-color: var(--primary);
-  color: var(--primary);
+  color: white;
 }
 
 .tab-title {

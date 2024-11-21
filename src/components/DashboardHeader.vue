@@ -83,6 +83,7 @@ const handleNavClick = (path) => {
 // 菜单点击处理
 
 const handleMenuClick = (route) => {
+  console.log(activeSubMenuId.value,route.path)
   if (activeSubMenuId.value === route.path) {
     activeSubMenuId.value = null
   } else {
@@ -116,7 +117,7 @@ const handleSubMenuClick = (parentPath, child) => {
   //console.log(parentPath,child.path)
   handleNavClick(parentPath+"/"+child.path)
   //
-  activeSubMenuId.value = null
+  //activeSubMenuId.value = null
 }
 
 const handleHomeClick = () => {
@@ -399,7 +400,7 @@ watch(() => route.path, (newPath) => {
   position: absolute;
   top: 100%;
   right: 0;
-  width: 200px;
+  width: 150px;
   background: white;
   border-radius: 4px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);

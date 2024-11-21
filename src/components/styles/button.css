@@ -5,7 +5,7 @@
   justify-content: center;
   gap: 0.5rem;
   padding: 0.8rem 1.5rem;
-  border-radius: var(--border-radius);
+  border-radius: var(--border-radius-sm);
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
